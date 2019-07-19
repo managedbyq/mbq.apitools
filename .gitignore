@@ -1,0 +1,19 @@
+.DS_Store
+.python-version
+.tox
+
+*.egg-info
+*.py[co]
+
+__pycache__
+
+build
+dist
+env
+
+staticfiles
+
+pip-log.txt
+
+# Pycharm
+.idea/

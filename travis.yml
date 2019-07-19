@@ -1,0 +1,25 @@
+---
+version: '3'
+
+services:
+  py36:
+    build:
+      context: .
+      args:
+        IMAGE: 'python:3.6-slim-stretch'
+    volumes:
+      - .:/app
+    environment:
+      PYTHON_VERSION: py36
+      TOX_WORK_DIR: /tox
+
+  py37:
+    build:
+      context: .
+      args:
+        IMAGE: 'python:3.7-slim-stretch'
+    volumes:
+      - .:/app
+    environment:
+      PYTHON_VERSION: py37
+      TOX_WORK_DIR: /tox
