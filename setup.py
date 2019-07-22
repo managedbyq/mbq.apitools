@@ -10,7 +10,9 @@ with codecs.open("README.md", "r", "utf-8") as f:
     readme = f.read()
 
 about = {}
-with codecs.open(os.path.join(here, "mbq", "apitools", "__version__.py"), "r", "utf-8") as f:
+with codecs.open(
+    os.path.join(here, "mbq", "apitools", "__version__.py"), "r", "utf-8"
+) as f:
     exec(f.read(), about)
 
 setuptools.setup(
@@ -38,7 +40,6 @@ setuptools.setup(
     keywords="",
     package_data={"mbq.apitools": ["py.typed", "*.pyi"]},
     packages=setuptools.find_packages(),
-    install_requires=[
-    ],
+    install_requires=[],
     zip_safe=False,
 )
