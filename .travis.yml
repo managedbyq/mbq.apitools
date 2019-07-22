@@ -36,7 +36,7 @@ deploy:
   password:
     secure: NEjZXMqd/OuMDfOk7vJJRgM4pF2uBAZhKDiJulstc7aY82AkAX+Bh84iCkI5me7RRBLPPo/EUDUZ+JcIDjSJ05fjeB65m9Lops/udkPOEKF9h75ZSa4Exml0mzBqYC/p46qCZ2AzWJbri+tiKDoexIJqQeRhG+ZxxK/T9iI7Xqk3hbtd8/TcgDF5ZYCwA/yM1v4nt3naMQSG4B8Va+3WsDY9E+GKAXcUvtZkc5TpskuWwRk964vLQQu6e5zBovsftXDbW7/65IDZ35HHBhwZ2DwFZnWJ2VlRdR2MUYY9zDMkv6uJED3mFRhZ/19JfQ2Im5I3C5zCrlxtK8kZ16QThaffBrcQRfk5mVAvjkSpq8isE2MFhiqnH8JeiXkQjpyF12cXdV56pWuYSaM3RQgtuf094G6f6zkmsFaERQxKr0qFDlGyQdWTO4ZCBPZdTbCFthuLY3YUB/3AS0LekHCHVidaj4WEzOHTAyp2N8JG3ck1c+4jX0C1f/0snLii6d8ysvpJREhC+p6QENpDMvHKq5UFeCPcVUYhSTAdOYxvBy4QPVMTmew/NevAzGvbdtavWY97172tbZfHG1jd28gvBFVwo9/UJ8Ve2zOgFSMfJ8u+N7LMZCVMojhIPL+BLu6ZxozJVYBIFHBbL0MSUDsnT5T/Ldmx7BfBWAGiU7dKhaA=
   'on':
-    repo: managedbyq/mbq.pubsub
+    repo: managedbyq/mbq.apitools
     branch: master
     tags: true
     python: '3.6'
