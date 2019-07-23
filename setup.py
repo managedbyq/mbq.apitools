@@ -11,7 +11,7 @@ with codecs.open("README.md", "r", "utf-8") as f:
 
 about = {}
 with codecs.open(
-    os.path.join(here, "mbq", "apitools", "__version__.py"), "r", "utf-8"
+    os.path.join(here, "mbq", "api_tools", "__version__.py"), "r", "utf-8"
 ) as f:
     exec(f.read(), about)
 
@@ -40,6 +40,10 @@ setuptools.setup(
     keywords="",
     package_data={"mbq.apitools": ["py.typed", "*.pyi"]},
     packages=setuptools.find_packages(),
-    install_requires=[],
+    install_requires=[
+        "marshmallow==3.0.0rc8",
+        "typing-extensions>=3.7.2",
+        "python-dateutil",
+    ],
     zip_safe=False,
 )
