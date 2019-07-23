@@ -4,9 +4,6 @@ language: python
 dist: xenial
 cache: pip
 
-services:
-  - mysql
-
 python:
   - '3.6'
   - '3.7'
@@ -34,8 +31,8 @@ deploy:
   provider: pypi
   user: managedbyq
   password:
-    secure: NEjZXMqd/OuMDfOk7vJJRgM4pF2uBAZhKDiJulstc7aY82AkAX+Bh84iCkI5me7RRBLPPo/EUDUZ+JcIDjSJ05fjeB65m9Lops/udkPOEKF9h75ZSa4Exml0mzBqYC/p46qCZ2AzWJbri+tiKDoexIJqQeRhG+ZxxK/T9iI7Xqk3hbtd8/TcgDF5ZYCwA/yM1v4nt3naMQSG4B8Va+3WsDY9E+GKAXcUvtZkc5TpskuWwRk964vLQQu6e5zBovsftXDbW7/65IDZ35HHBhwZ2DwFZnWJ2VlRdR2MUYY9zDMkv6uJED3mFRhZ/19JfQ2Im5I3C5zCrlxtK8kZ16QThaffBrcQRfk5mVAvjkSpq8isE2MFhiqnH8JeiXkQjpyF12cXdV56pWuYSaM3RQgtuf094G6f6zkmsFaERQxKr0qFDlGyQdWTO4ZCBPZdTbCFthuLY3YUB/3AS0LekHCHVidaj4WEzOHTAyp2N8JG3ck1c+4jX0C1f/0snLii6d8ysvpJREhC+p6QENpDMvHKq5UFeCPcVUYhSTAdOYxvBy4QPVMTmew/NevAzGvbdtavWY97172tbZfHG1jd28gvBFVwo9/UJ8Ve2zOgFSMfJ8u+N7LMZCVMojhIPL+BLu6ZxozJVYBIFHBbL0MSUDsnT5T/Ldmx7BfBWAGiU7dKhaA=
-  'on':
+    secure: KknRgZiw3Y0+7Z2uWFBZkkah7Wtd3OCiFdkh7nq/+0aCGDxx7eyVJgs+yriqTVDobHbz4i9lrqYlZpgo8StKiPE0UKTlPt9HbD5xgjUoc7wZjzCnDREFukQPLegC7C8BRHAOuOj/IVUjazuEHcI9GbfVAdUI3mROupORqlUKa9tZ0z5g5Z7WjPtepga4CETi9PviZ+ZOmWV5KsJM+n0VvbS8Tq8ds1YRLetS8+kpYa2J0ON2hypb+vdC1SXvRoNJnGzhNnjHQlr1BUUa/JGHzC8Sy5LJbU3LK7njN5XPkvDx8A0/GFAMk60PACGaWF0lxV/K3aLMWPO/820A+3+mVgWHYFwDQ+UjOoVPB+Yh9i7AvYMTeL4XjVNxvvr1LSOs+BvKjjJsvOrc1uG3h412Sl/mQwIZ1UVj/sKc3N5gZNDQ+UwIcggVZ7O6rJnlkIQH50tTMnE8ZNyJY/dDBQVp4BflJfVA99cl7v4WuwVRIKJIIVh1cx31iKZUskV7WMCSKv3Tkg/lYunRfBTZ3y1GPZ1C+vspTxoZIatzOzu2mQvN2kaifCSJjuKHff92PzuZI+Sc++kneqpQgC0dzfAXWscatkGT66vr5OdtiTJQnd7TAiflQx+fDOJcZOIxVGcA33v0hG1ukBMcWzHMA3xVJ2i5myA/RTslbIVi7Ls0VMw=
+  on:
     repo: managedbyq/mbq.apitools
     branch: master
     tags: true
