@@ -31,7 +31,7 @@ deploy:
   provider: pypi
   user: managedbyq
   password:
-    secure: zNBqEyPTJRUnFqweqSr+9H11ZG7eZNme/AzcDvERv8dEhOxqNo4ODKj1tvz5IWlL5koEPrJt63BzpyUnPoJbOzsh5X/GTgbY/ovOZG13PxujgyiV/SFRtXNp+kFiGjWWmO6ADNQjc6j2eSG+86zMglhiq5NF9JfXueU1WGn3bWDbaeaO80Bf4QXfWyqQ2cVWMBQzzcNl2gH+mI2oe+fIDGqY94VXFZDsEk3WgK1gwvWDnhI770nzh6ws1nzEriuInymQNDhplvE0zGzZiPERru8obfYfvdhh0AZJqB9itRw34175tIrwhsodeidf2FN5U4lwuQW8hsJDEZzMrZAfHxKJBjbtGTq8+pHLuaXirCWAe5P7EGRKyqodUc2/N0MypPj7X1Bd5v+ck+PWNpTmJ0K9h1dozPSqCMYfjL53HILAcfOiSFQwd0UmZlc0b5uTjX+s4uhr23nyaOh3/ky0H90WLERfXb3ibrT+ar9osb9CBulmuYQlr20EATzA6UrdFSvkLwNi9nCZBWb0/5ULq6P+o63MVGWot45UZhA9AaoSzil+EESpzEWR3Z3gWpnI62cllNZHqI6o+VyCGEZNDIiwcgI51RxqK78LYTJmrj3BcwkKa3dNBv5Rec4M3rtwHecGlhOCFz2TrqbN4BX3ND5e4PZJFR/DDLFr/HAM/Q=
+    secure: 1+JmJ0etDFjYRljBV09lfpC3v4bQ5hm7kTtIVtEo70Mu2GZQCr/oLMQvapUzyBYFDgRNKKr1gtY5MpKsFDtFpJHEQVp7LLYZkl6Xee4Sik2f1nxm/b1fWdAiP+fl/4tqS+7K+t0gND2tOlPDYgShK/3ruGaOYHA8Fvo4wmcaEEiCatNzjhG101dqaOorFHWq8tFQO73xRXEQODM+Q9ocEOziKTlJ7hPABJcNDHHoM4GgX7p6PBIfeSEuuZ7qeNl8+xv2TPXxOUv4PtTdLHe9yekzdsqN8x6N9Bu4n2U6Eybvkvj6wIVeIrXaoP6o+W2MQIfopFxoj5PcAjoNIfhKUAF5kOBQlO6GSgMzAWx/AA4gwJjXnHEQlUgHSsVe+tA+1C+xdtXTOZoNlTp5l12E23pEhPuzImnX4RKSf5H07ot4zQh+BxbHU/1Saj1rrY4hyO2KfS7ta2BYptTN4AMKbxqSnumThpA0bSZ3xaH/jyQfg7BCDpaP/DMMpPemzNmEmNcNYzQ4giXUJFzWNnhtZ4l7LnAeJI0KYgVhgdAVYjWOVkw69bZ4RBvy7xKeF1rcA/aAivutbi/IRlEv+Bj9zND/4jnGzdnpeD8tYxSUzEWe/a2qydc8ZklNCVpmObrIfH7eQoy88u6HITWJ5nVdTiTCCdMNMPlca5bBFFj1rEc=
   on:
     repo: managedbyq/mbq.apitools
     branch: master
@@ -40,5 +40,5 @@ deploy:
     # admittedly, this condition is a bit silly but we want the deploy to happen
     # on exactly one build, not all py36 builds, and looking for django 1.11 is
     # a cheap way to accomplish that.
-    condition: $DJANGO = '1.11'
+    condition: "$DJANGO = '1.11'"
     distributions: sdist bdist_wheel
