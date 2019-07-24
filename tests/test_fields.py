@@ -273,3 +273,12 @@ class TransformFieldTests(SimpleTestCase):
         data = payload_schema.load({"zipcode": " 07770"})
 
         self.assertEqual(data.zipcode, "07770")
+
+    def test_transform_with_many(self):
+        spec = {"zipcode": fields.String(transform=lambda x: x.strip(), many=True)}
+
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        data = payload_schema.load({"zipcode": [" 07770", "1123", "123 "]})
+
+        self.assertEqual(data.zipcode, ["07770", "1123", "123"])

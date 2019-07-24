@@ -24,7 +24,8 @@ class Field(fields.Field):
             return super().__new__(cls)
 
         elif kwargs.pop("many", False):
-            return _List(cls_or_instance=cls(**kwargs), **kwargs)
+            transform = kwargs.pop("transform", None)
+            return _List(cls_or_instance=cls(transform=transform, **kwargs), **kwargs)
 
         return super().__new__(cls)
 
