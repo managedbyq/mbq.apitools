@@ -35,6 +35,7 @@ class Field(fields.Field):
         allow_none=False,
         validate=None,
         many=NOT_SPECIFIED,
+        transform=None,
         **kwargs,
     ):
 
@@ -59,7 +60,18 @@ class Field(fields.Field):
         if default is not NOT_SPECIFIED and default is not OMIT:
             kwargs["missing"] = default
 
+        self.transform = transform
+
         super().__init__(**kwargs)
+
+    def deserialize(self, value, attr=None, data=None, **kwargs):
+        if self.transform:
+            try:
+                value = self.transform(value)
+            except Exception as e:
+                raise exceptions.ValidationError(e)
+
+        return super().deserialize(value, attr, data, **kwargs)
 
 
 class Bool(fields.Boolean, Field):
