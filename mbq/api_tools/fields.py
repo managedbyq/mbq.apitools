@@ -65,12 +65,13 @@ class Field(fields.Field):
         super().__init__(**kwargs)
 
     def deserialize(self, value, attr=None, data=None, **kwargs):
-        ret = super().deserialize(value, attr, data, **kwargs)
-
         if self.transform:
-            ret = self.transform(ret)
+            try:
+                value = self.transform(value)
+            except Exception as e:
+                raise exceptions.ValidationError(e)
 
-        return ret
+        return super().deserialize(value, attr, data, **kwargs)
 
 
 class Bool(fields.Boolean, Field):
