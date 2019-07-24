@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.http import QueryDict
 from django.test import SimpleTestCase
 
@@ -224,3 +226,23 @@ class EmailFieldTests(SimpleTestCase):
 
         with self.assertRaises(exceptions.ValidationError):
             payload_schema.load({})
+
+
+class TransformFieldTests(SimpleTestCase):
+    def test_string_transform(self):
+        spec = {"zipcode": fields.String(transform=lambda x: x.strip())}
+
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        data = payload_schema.load({"zipcode": " 07770"})
+
+        self.assertEqual(data.zipcode, "07770")
+
+    def test_decimal_transform(self):
+        spec = {"tax": fields.Decimal(transform=lambda x: round(x, 2))}
+
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        data = payload_schema.load({"tax": 10.125})
+
+        self.assertEqual(data.tax, Decimal("10.12"))
