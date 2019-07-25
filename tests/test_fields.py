@@ -202,7 +202,7 @@ class NestedFieldTest(SimpleTestCase):
 
 
 class DecimalFieldTests(SimpleTestCase):
-    def test_validate_field(self):
+    def test_max_digits(self):
         param_schema = schema.make_param_schema({"price": fields.Decimal(max_digits=6)})
 
         with self.assertRaises(exceptions.ValidationError):
@@ -221,14 +221,14 @@ class DecimalFieldTests(SimpleTestCase):
         spec = {"age": fields.Decimal()}
         payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
 
-        payload_schema.load({"age": 1})
-        payload_schema.load({"age": 7})
+        payload_schema.load({"age": 1.1})
+        payload_schema.load({"age": 7.1})
 
-        spec = {"age": fields.Decimal(min_val=5)}
+        spec = {"age": fields.Decimal(min_val=5.5)}
         payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
-        payload_schema.load({"age": 6})
+        payload_schema.load({"age": 6.2})
         with self.assertRaises(exceptions.ValidationError):
-            payload_schema.load({"age": 1})
+            payload_schema.load({"age": 1.3})
 
         spec = {"age": fields.Decimal(max_val=10)}
         payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
@@ -240,9 +240,9 @@ class DecimalFieldTests(SimpleTestCase):
         payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
         payload_schema.load({"age": 5})
         with self.assertRaises(exceptions.ValidationError):
-            payload_schema.load({"age": 1})
+            payload_schema.load({"age": 1.4})
         with self.assertRaises(exceptions.ValidationError):
-            payload_schema.load({"age": 6})
+            payload_schema.load({"age": 6.2})
 
 
 class EmailFieldTests(SimpleTestCase):
