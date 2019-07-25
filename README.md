@@ -5,8 +5,8 @@
 Some nice things about `mbq.apitools`:
 * All fields specified in a param or payload schema are required by default, and can be marked as optional by providing a `default=` argument to the field class. The framework will automatically return a 400 response for all requests which do not conform to the specified schema. Details for each nonconforming field will be included in the response.
 * The parsed parameters and payloads end up as rich types on the request. If a field is marked as `fields.DateTime`, then it will be on `request.payload` as a `datetime` object.
-* Pagination is handled entirely by the framework. Just mark a view as paginated and return an instance of a `PaginatedResponse` and voila!
-*  All success responses have a 200 status code.
+* Pagination is handled entirely by the framework. Simply include `paginated=True` when you define the view, return a `PaginatedResponse`, and voila!
+* All success responses have a 200 status code.
 * All list and paginated responses contain the list of resources under the key `"objects"`.
 * All error responses (4xx) have the same shape (an `"error_code"` and `"detail"` key).
 
@@ -160,7 +160,7 @@ Some allow the `error_code` and `detail` to be specified, while others have them
 * To be used when the client made an error it could have avoided.
 * `error_code` and `detail` must be specified.
 ```python
-responses.ClientErrorResponse("quote_state_error", "Cannot approved an already approved quote")
+responses.ClientErrorResponse("quote_state_error", "Cannot approve an already approved quote")
 ```
 
 #### `ServerValidationErrorResponse`
@@ -197,6 +197,9 @@ class SomeObjView(View):
         ...
 ```
 ## Schemas & Fields
+
+Schemas and Fields use the Marshmallow library under the hood.
+
 All schema fields support the following arguments:
 * `default`
 	* All fields in a schema are required by default. Use the `default` argument to both mark a field as optional and specify the default value to use if the field is not received.
@@ -283,7 +286,9 @@ def update_person(request, id=None):
 
 The pagination mechanics are fully managed by the framework. All you have to do is specify `paginated=True` in the decorator, and return a `PaginatedResponse` object.
 
-The expected query parameters when `paginated=True` are `page` and `page_size`. `page` obviously defaults to `1` and `page_size` defaults to `20`.
+The expected query parameters when `paginated=True` are `page` and `page_size`.
+
+`page` obviously defaults to `1`, and `page_size` defaults to `20`, but the client is more than welcome to send down a different value for `page_size`.
 
 You can globally override the default `page_size` via the `API_TOOLS["DEFAULT_PAGE_SIZE"]` setting. You can override a particular view's default page size via the `page_size` argument to the decorator.
 
