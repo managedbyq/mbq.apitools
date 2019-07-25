@@ -19,6 +19,7 @@ class ErrorHandlingTests(SimpleTestCase):
         404: responses.NotFoundResponse,
         405: responses.MethodNotAllowedResponse,
         422: responses.ServerValidationErrorResponse,
+        500: responses.ServerErrorResponse,
     }
 
     def test_error_responses(self):

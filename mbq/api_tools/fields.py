@@ -186,25 +186,32 @@ class Float(fields.Float, Field):
 class Decimal(fields.Decimal, Field):
     """Decimal field."""
 
-    def __init__(self, *args, max_digits=None, **kwargs):
+    def __init__(self, *args, max_digits=None, min_val=None, max_val=None, **kwargs):
         self.max_digits = max_digits
+        self.min_val = min_val
+        self.max_val = max_val
 
         super().__init__(*args, **kwargs)
 
-    def _deserialize(self, *args, **kwargs):
-        result = super()._deserialize(*args, **kwargs)
+    def _deserialize(self, value, attr, data, **kwargs):
+        ret = super()._deserialize(value, attr, data, **kwargs)
 
-        if not self.max_digits:
-            return result
-
-        if self.max_digits and False:
+        if not self._validate_precision(ret):
             raise exceptions.ValidationError(
-                f"Decimal field cannot be longer than {self.max_digits}"
+                f"Invalid decimal field: Digits cannot be longer than {self.max_digits}"
             )
 
-        return self.validate_precision(result)
+        if not self._validate_size(ret):
+            raise exceptions.ValidationError(f"Invalid decimal value for {attr}")
 
-    def validate_precision(self, value):
+        return ret
+
+    def _validate_size(self, val):
+        return (self.max_val is None or val <= self.max_val) and (
+            self.min_val is None or val >= self.min_val
+        )
+
+    def _validate_precision(self, value):
         """Validate the precision of the decimal field.
 
         # Simplified from: rest_framework.fields.Decimal.validate_precision
@@ -223,15 +230,10 @@ class Decimal(fields.Decimal, Field):
             # 0.001234
             total_digits = abs(exponent)
 
-        error_messages = []
         if self.max_digits is not None and total_digits > self.max_digits:
-            error_messages.append(f"Digits cannot be longer than {self.max_digits}")
+            return False
 
-        if error_messages:
-            errors = ", ".join(error_messages)
-            raise exceptions.ValidationError(f"Invalid decimal field: {errors}")
-
-        return value
+        return True
 
 
 class Time(fields.Time, Field):

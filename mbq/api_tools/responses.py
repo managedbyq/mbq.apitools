@@ -119,3 +119,9 @@ class MethodNotAllowedResponse(ErrorResponse):
     status_code = 405
     error_code = "method_not_allowed"
     detail = "This route does not support that HTTP method"
+
+
+class ServerErrorResponse(ErrorResponse):
+    status_code = 500
+    error_code = "server_error"
+    detail = "An unexpected error occurred"
