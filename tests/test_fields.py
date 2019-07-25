@@ -217,6 +217,33 @@ class DecimalFieldTests(SimpleTestCase):
         with self.assertRaises(exceptions.ValidationError):
             param_schema.load(QueryDict("price=0.0000001"))
 
+    def test_size(self):
+        spec = {"age": fields.Decimal()}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        payload_schema.load({"age": 1})
+        payload_schema.load({"age": 7})
+
+        spec = {"age": fields.Decimal(min_val=5)}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+        payload_schema.load({"age": 6})
+        with self.assertRaises(exceptions.ValidationError):
+            payload_schema.load({"age": 1})
+
+        spec = {"age": fields.Decimal(max_val=10)}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+        payload_schema.load({"age": 7})
+        with self.assertRaises(exceptions.ValidationError):
+            payload_schema.load({"age": 15})
+
+        spec = {"age": fields.Decimal(min_val=5, max_val=5)}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+        payload_schema.load({"age": 5})
+        with self.assertRaises(exceptions.ValidationError):
+            payload_schema.load({"age": 1})
+        with self.assertRaises(exceptions.ValidationError):
+            payload_schema.load({"age": 6})
+
 
 class EmailFieldTests(SimpleTestCase):
     def test_required(self):

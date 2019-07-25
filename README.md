@@ -238,6 +238,8 @@ The available fields and their custom arguments are:
 * `Float`
 * `Decimal`
 	* `max_digits`
+    * `min_val`
+    * `max_val`
 * `Email`
 * `Dict`
 	* Use sparingly. Allows for any arbitrary dictionary to be passed in.
