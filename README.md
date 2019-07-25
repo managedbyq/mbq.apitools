@@ -20,7 +20,7 @@ from mbq.api_tools.views import View, view
     "GET",
     permissions=[SomeDRFPermissionClass],
     params={
-	    "product_ids": fields.Int(default=None, many=True),
+        "product_ids": fields.Int(default=None, many=True),
         "zipcode": fields.String(),
     }
 )
@@ -28,7 +28,7 @@ def get_categories(request):
     categories = Category.objects.filter(zipcode=request.params.zipcode)
 
     if request.product_ids:
-	    categories = categories.filter(product_id__in=request.params.product_ids)
+        categories = categories.filter(product_id__in=request.params.product_ids)
 
     categories = CategorySerializer(categories, many=True).data
 
