@@ -8,7 +8,7 @@ Some nice things about `mbq.apitools`:
 * Pagination is handled entirely by the framework. Simply include `paginated=True` when you define the view, return a `PaginatedResponse`, and voila!
 * All success responses have a 200 status code.
 * All list and paginated responses contain the list of resources under the key `"objects"`.
-* All error responses (4xx) have the same shape (an `"error_code"` and `"detail"` key).
+* All error responses have the same shape (an `"error_code"` and `"detail"` key).
 
 ## Example
 
@@ -135,7 +135,7 @@ See the `Pagination` section for more details.
 
 ### Error Responses
 
-All error responses (4xx) will have the following shape:
+All error responses will have the following shape:
 ```json
 {"error_code": "some_unique_error_string", "detail": "More details about the error..."}
 ```
@@ -154,6 +154,14 @@ Some allow the `error_code` and `detail` to be specified, while others have them
 	* `"not_found"`
 * `detail`
 	* `"Resource not found"`
+
+
+#### `ServerErrorResponse`
+* 500
+* `error_code`
+  * `"server_error"`
+* `detail`
+  * `"An unexpected error occurred"`
 
 #### `ClientErrorResponse`
 * 400
