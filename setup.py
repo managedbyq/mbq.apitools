@@ -38,7 +38,7 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries",
     ],
     keywords="",
-    package_data={"mbq.apitools": ["py.typed", "*.pyi"]},
+    package_data={"mbq.api_tools": ["py.typed", "*.pyi"]},
     packages=setuptools.find_packages(),
     install_requires=[
         "marshmallow==3.0.0rc8",
