@@ -1,13 +1,13 @@
 # mbq.apitools
 
-`mbq.apitools` is a python library to assist with writing endpoints in Django. It provides a decorator and class for writing views which allows for strict typing of incoming query parameters and payloads, as well as consistent response shapes and status codes on the way out.
+`mbq.apitools` is a python library for writing endpoints in Django. It provides a view decorator and view class that allow for strict typing of incoming query parameters and payloads, as well as consistent response shapes and status codes on the way out.
 
 Some nice things about `mbq.apitools`:
 * All fields specified in a param or payload schema are required by default, and can be marked as optional by providing a `default=` argument to the field class. The framework will automatically return a 400 response for all requests which do not conform to the specified schema. Details for each nonconforming field will be included in the response.
 * The parsed parameters and payloads end up as rich types on the request. If a field is marked as `fields.DateTime`, then it will be on `request.payload` as a `datetime` object.
 * Pagination is handled entirely by the framework. Just mark a view as paginated and return an instance of a `PaginatedResponse` and voila!
-*  All success responses will have a 200 status code.
-* All list and paginated responses will contain the list of resources under the key `"objects"`.
+*  All success responses have a 200 status code.
+* All list and paginated responses contain the list of resources under the key `"objects"`.
 * All error responses (4xx) have the same shape (an `"error_code"` and `"detail"` key).
 
 ## Example
@@ -78,7 +78,7 @@ All view methods on the class need to be marked with `@view.method(...)`, which 
 
 ## Responses
 
-Status codes are predefined by the different response classes. Status codes will never be specified in a view.
+Status codes are predefined by the different response classes. Status codes will _never_ be specified in a view.
 
 ### Success Responses
 
@@ -126,12 +126,12 @@ will generate:
 Alternatively, instead of a DRF Serializer class, you can pass in a function that takes in a list of objects and returns a list of serialized objects,
 ```python
 responses.PaginatedResponse(
-    [obj1, obj2],
+    some_queryset,
     lambda objs: [obj.to_dict() for obj in objs],
     request,
 )
 ```
-(See the `Pagination` section for more details)
+See the `Pagination` section for more details.
 
 ### Error Responses
 
@@ -158,7 +158,7 @@ Some allow the `error_code` and `detail` to be specified, while others have them
 #### `ClientErrorResponse`
 * 400
 * To be used when the client made an error it could have avoided.
-* `error_code` and `detail` must be specified
+* `error_code` and `detail` must be specified.
 ```python
 responses.ClientErrorResponse("quote_state_error", "Cannot approved an already approved quote")
 ```
@@ -166,7 +166,7 @@ responses.ClientErrorResponse("quote_state_error", "Cannot approved an already a
 #### `ServerValidationErrorResponse`
 * 422
 * To be used when a validation error occurs that could only be detected by the server.
-* `error_code` and `detail` must be specified
+* `error_code` and `detail` must be specified.
  ```python
 responses.ClientErrorResponse("email_already_taken", "The email you have provided is already in use")
 ```
@@ -198,8 +198,6 @@ class SomeObjView(View):
 ```
 ## Schemas & Fields
 All schema fields support the following arguments:
-* `param_name`
-	* To be used if the incoming query parameter will have a different name than the field name in the schema. For example, if the incoming query parameter will be specified as `?state=foo`, but you would like it to be `order_state` under `request.params`, you would do: `{"order_state": fields.String(param_name="state")}`
 * `default`
 	* All fields in a schema are required by default. Use the `default` argument to both mark a field as optional and specify the default value to use if the field is not received.
 	* If you would like the field to be left out entirely of the parsed params/payload, you can do `default=fields.OMIT`
@@ -212,8 +210,10 @@ All schema fields support the following arguments:
 * `many`
 	* Defaults to `False`. Pass in `True` if multiple values are allowed for the field. `many=True` will result in a list of values on the parsed params/payload.
 	* For query parameters, this will support both comma separated values under a single arg (`?order_ids=1,2`) and multiple instances of the arg `(?order_ids=1&order_ids=2)`.
-	* For payloads this means a list of values is expected.
+	* For payloads, a list of values is expected.
 	* When used with `validate` and/or `transform`, these functions will be applied to each individual value.
+* `param_name`
+	* Use sparingly. It's to be used if the incoming query parameter will have a different name than the field name in the schema. For example, if the incoming query parameter will be specified as `?state=foo`, but you would like it to be `order_state` under `request.params`, you would do: `{"order_state": fields.String(param_name="state")}`
 
 The available fields and their custom arguments are:
 * `Bool`
@@ -285,9 +285,9 @@ The pagination mechanics are fully managed by the framework. All you have to do 
 
 The expected query parameters when `paginated=True` are `page` and `page_size`. `page` obviously defaults to `1` and `page_size` defaults to `20`.
 
-You can globally override the default `page_size` via the `API_TOOLS["DEFAULT_PAGE_SIZE"]` setting. You can override a particular views default page size via the `page_size` argument to the decorator.
+You can globally override the default `page_size` via the `API_TOOLS["DEFAULT_PAGE_SIZE"]` setting. You can override a particular view's default page size via the `page_size` argument to the decorator.
 
-The pagination data returned in the response under the `pagination` key will look like:
+The pagination data returned in the response under the `pagination` key looks like:
 ```json
 {
     "page": 1,
