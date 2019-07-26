@@ -1,11 +1,10 @@
 from django.utils import timezone
 
-from marshmallow import ValidationError, fields
+from marshmallow import ValidationError, fields, utils
 
 from . import exceptions, schema
 
 
-NOT_SPECIFIED = object()
 OMIT = object()
 
 
@@ -32,10 +31,10 @@ class Field(fields.Field):
     def __init__(
         self,
         param_name=None,
-        default=NOT_SPECIFIED,
+        default=utils.missing,
         allow_none=False,
         validate=None,
-        many=NOT_SPECIFIED,
+        many=utils.missing,
         transform=None,
         **kwargs,
     ):
@@ -43,14 +42,14 @@ class Field(fields.Field):
         kwargs.update(
             {
                 "allow_none": allow_none,
-                "required": default is NOT_SPECIFIED,
+                "required": default is utils.missing,
                 "validate": validate,
             }
         )
 
         if isinstance(self, Nested):
             kwargs["many"] = many
-        elif many is not NOT_SPECIFIED:
+        elif many is not utils.missing:
             raise TypeError(
                 "many should never be passed into __init__, it's only there to make mypy happy"
             )
@@ -58,7 +57,7 @@ class Field(fields.Field):
         if param_name is not None:
             kwargs["data_key"] = param_name
 
-        if default is not NOT_SPECIFIED and default is not OMIT:
+        if default is not utils.missing and default is not OMIT:
             kwargs["missing"] = default
 
         self.transform = transform

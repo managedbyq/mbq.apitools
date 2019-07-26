@@ -200,6 +200,19 @@ class NestedFieldTest(SimpleTestCase):
         self.assertEqual(result.orders[0].id, 10)
         self.assertEqual(len(result.orders[0].quotes), 3)
 
+    def test_is_required_by_default(self):
+        spec = {"nested": fields.Nested({"foo": fields.String()})}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        with self.assertRaises(exceptions.ValidationError):
+            payload_schema.load({})
+
+        spec = {"nested": fields.Nested({"foo": fields.String(many=True)})}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        with self.assertRaises(exceptions.ValidationError):
+            payload_schema.load({})
+
 
 class DecimalFieldTests(SimpleTestCase):
     def test_max_digits(self):
