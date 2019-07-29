@@ -56,8 +56,7 @@ Use the `@view` decorator for all function based views. It accepts the following
 	* GET, POST, PATCH, PUT, DELETE
 	* Defaults to GET
 * `permissions`
-	* A list of DRF permission classes
-		* They don't necessarily need to subclass a DRF permission class, they only need to have a `has_permission(request, view)` method.
+	* A list of DRF permission classes _or_ functions that take in a request object and return `True` if authorized, `False` if unauthorized.
 * `params`
 	* Schema for validating incoming query parameters. The query parameters will be available at `request.params`.
 * `payload`
@@ -319,6 +318,17 @@ An empty page will be returned if the first page is requested and there is no da
 
 If `params` or `payload` is specified in the decorator, then the parsed query parameters will be at `request.params` or `request.payload`. This will be an immutable object. If you would like it in the form of a dictionary, you can do `request.params.as_dict()`.
 
+## Permissions
+
+Permissions are required. A non-empty list must be passed into the decorator. If you would like to write an unauthorized endpoint, you can do:
+```python
+from mbq.api_tools import permissions
+
+@view(permissions=[permissions.NoAuthorization])
+def my_view(request):
+    pass
+````
+
 ## Settings
 The default settings are:
 ```python
@@ -326,7 +336,6 @@ API_TOOLS = {
     "DEFAULT_PAGE_SIZE": 20,
     "UNKNOWN_PAYLOAD_FIELDS": "raise",
     "UNKNOWN_PARAM_FIELDS": "raise",
-    "REQUIRE_PERMISSIONS": True,
 }
 ```
 Override as you see fit.

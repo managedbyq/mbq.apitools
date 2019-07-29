@@ -4,7 +4,7 @@ from unittest.mock import Mock
 from django.http import QueryDict
 from django.test import SimpleTestCase
 
-from mbq.api_tools import fields
+from mbq.api_tools import fields, permissions
 from mbq.api_tools.responses import (
     ClientErrorResponse,
     DetailResponse,
@@ -40,10 +40,16 @@ class ViewFunctionTests(SimpleTestCase):
         super().setUp()
         self.request = Mock(body="", method="GET", GET=QueryDict())
 
-    def test_perform_authorization(self):
+    def test_permissions_required(self):
         with self.assertRaises(TypeError):
             view(permissions=[])(view_func)
 
+        response = view(permissions=[permissions.NoAuthorization])(view_func)(
+            self.request
+        )
+        self.assertTrue(isinstance(response, DetailResponse))
+
+    def test_perform_authorization_drf_class(self):
         self.assertTrue(
             isinstance(
                 view(permissions=[TruePermissionStub])(view_func)(self.request),
@@ -73,6 +79,15 @@ class ViewFunctionTests(SimpleTestCase):
                 UnauthorizedResponse,
             )
         )
+
+    def test_perform_authorization_function(self):
+        wrapped_view = view(permissions=[lambda x: True])(view_func)
+        response = wrapped_view(self.request)
+        self.assertTrue(isinstance(response, DetailResponse))
+
+        wrapped_view = view(permissions=[lambda x: False])(view_func)
+        response = wrapped_view(self.request)
+        self.assertTrue(isinstance(response, UnauthorizedResponse))
 
     def test_method_not_allowed(self):
         self.assertTrue(

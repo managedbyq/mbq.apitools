@@ -28,7 +28,7 @@ class ViewDecorator:
     def __init__(
         self,
         http_method_name: HttpMethodNames = "GET",
-        permissions: Optional[PermissionsCollection] = (),
+        permissions: PermissionsCollection = (),
         params: Optional[Dict[str, fields.Field]] = None,
         payload: Optional[Dict[str, fields.Field]] = None,
         paginated: bool = False,
@@ -36,7 +36,7 @@ class ViewDecorator:
         on_unknown_field: Optional[OnUnknownField] = None,
         _method: Optional[bool] = None,
     ):
-        if not permissions and settings.API_TOOLS.get("REQUIRE_PERMISSIONS", True):
+        if not permissions:
             raise TypeError("Permissions are required")
 
         if http_method_name in {"POST", "PATCH", "PUT"} and payload is None:
@@ -210,13 +210,18 @@ class ViewFunction:
 
     def _perform_authorization(self) -> Optional[str]:
         """Returns None if authorization succeeds, or an error message if it fails."""
-        permissions = [permission() for permission in self.permissions]
-
-        for permission in permissions:
-            if permission.has_permission(self.request, self) is not True:
-                # Protecting against mocks with these type checks
-                message = getattr(permission, "message", None)
-                return message if isinstance(message, str) else "Authorization Failed"
+        for permission in self.permissions:
+            # If it is a class, assume it is a DRF permission class.
+            if isinstance(permission, type):
+                if permission().has_permission(self.request, self) is not True:
+                    # Protecting against mocks with these type checks
+                    message = getattr(permission, "message", None)
+                    return (
+                        message if isinstance(message, str) else "Authorization Failed"
+                    )
+            else:
+                if permission(self.request) is not True:
+                    return "Authorization Failed"
 
         return None
 
