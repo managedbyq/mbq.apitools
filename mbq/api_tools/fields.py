@@ -65,7 +65,7 @@ class Field(fields.Field):
         super().__init__(**kwargs)
 
     def deserialize(self, value, attr=None, data=None, **kwargs):
-        if self.transform:
+        if self.transform and value is not utils.missing:
             try:
                 value = self.transform(value)
             except Exception as e:

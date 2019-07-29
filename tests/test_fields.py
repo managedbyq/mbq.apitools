@@ -322,3 +322,11 @@ class TransformFieldTests(SimpleTestCase):
         data = payload_schema.load({"zipcode": [" 07770", "1123", "123 "]})
 
         self.assertEqual(data.zipcode, ["07770", "1123", "123"])
+
+    def test_not_transform_if_missing(self):
+        spec = {"name": fields.String(default=None, transform=lambda x: str(x))}
+        payload_schema = schema.generate_schema(schema.PayloadSchema, spec)()
+
+        data = payload_schema.load({})
+
+        self.assertEqual(data.name, None)
