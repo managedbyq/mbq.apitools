@@ -140,6 +140,21 @@ All error responses will have the following shape:
 ```
 Some allow the `error_code` and `detail` to be specified, while others have them hard-coded.
 
+#### `ClientErrorResponse`
+* 400
+* To be used when the client made an error it could have avoided.
+* `error_code` and `detail` must be specified.
+```python
+responses.ClientErrorResponse("quote_state_error", "Cannot approve an already approved quote")
+```
+
+#### `UnauthenticatedResponse`
+* 401
+* `error_code`
+  * `"unauthenticated"`
+* `detail`
+  * `"Authentication credentials were not provided"`
+
 #### `UnauthorizedResponse`
 * 403
 * `error_code`
@@ -154,22 +169,6 @@ Some allow the `error_code` and `detail` to be specified, while others have them
 * `detail`
 	* `"Resource not found"`
 
-
-#### `ServerErrorResponse`
-* 500
-* `error_code`
-  * `"server_error"`
-* `detail`
-  * `"An unexpected error occurred"`
-
-#### `ClientErrorResponse`
-* 400
-* To be used when the client made an error it could have avoided.
-* `error_code` and `detail` must be specified.
-```python
-responses.ClientErrorResponse("quote_state_error", "Cannot approve an already approved quote")
-```
-
 #### `ServerValidationErrorResponse`
 * 422
 * To be used when a validation error occurs that could only be detected by the server.
@@ -177,6 +176,13 @@ responses.ClientErrorResponse("quote_state_error", "Cannot approve an already ap
  ```python
 responses.ClientErrorResponse("email_already_taken", "The email you have provided is already in use")
 ```
+
+#### `ServerErrorResponse`
+* 500
+* `error_code`
+  * `"server_error"`
+* `detail`
+  * `"An unexpected error occurred"`
 
 ## Exceptions
 
