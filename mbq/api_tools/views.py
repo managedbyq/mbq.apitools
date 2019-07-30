@@ -13,6 +13,7 @@ from .responses import (
     MethodNotAllowedResponse,
     PaginatedResponse,
     UnauthorizedResponse,
+    UnsupportedMediaTypeResponse,
 )
 from .schema import Pagination, ParamSchema, PayloadSchema, generate_schema
 from .utils import first
@@ -200,9 +201,14 @@ class ViewFunction:
             return e.response
 
     def _enrich_request(self):
-        payload = (
-            json.loads(self.request.body.decode("utf-8")) if self.request.body else {}
-        )
+        try:
+            payload = (
+                json.loads(self.request.body.decode("utf-8"))
+                if self.request.body
+                else {}
+            )
+        except json.JSONDecodeError:
+            raise exceptions.ImmediateResponseError(UnsupportedMediaTypeResponse())
 
         self.request.payload = self.get_payload_schema().load(payload)
         self.request.params = self.get_param_schema().load(self.request.GET)
