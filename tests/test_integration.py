@@ -55,6 +55,25 @@ class ErrorHandlingTests(SimpleTestCase):
         self.assertEqual(response.data["detail"], "here are the details")
 
 
+class MediaTypeTests(SimpleTestCase):
+    def test_bad_json(self):
+        @view("POST", permissions=[TruePermission], payload={"foo": fields.String})
+        def view_func(request):
+            return responses.DetailResponse()
+
+        request = RequestFactory().post("/some-url", "}---f", content_type="text")
+        response = view_func(request)
+
+        self.assertEqual(response.status_code, 415)
+
+        request = RequestFactory().post(
+            "/some-url", "}---f", content_type="application/json"
+        )
+        response = view_func(request)
+
+        self.assertEqual(response.status_code, 415)
+
+
 class UnknownFieldsTests(SimpleTestCase):
     def test_unknown_payload_field_settings(self):
         @view(

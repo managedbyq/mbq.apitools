@@ -99,10 +99,6 @@ class PaginationErrorResponse(ClientErrorResponse):
     error_code = "pagination_error"
 
 
-class ServerValidationErrorResponse(ErrorResponse):
-    status_code = 422
-
-
 class NotFoundResponse(ErrorResponse):
     status_code = 404
     error_code = "not_found"
@@ -125,6 +121,16 @@ class MethodNotAllowedResponse(ErrorResponse):
     status_code = 405
     error_code = "method_not_allowed"
     detail = "This route does not support that HTTP method"
+
+
+class UnsupportedMediaTypeResponse(ErrorResponse):
+    status_code = 415
+    error_code = "unsupported_media_type"
+    detail = "This endpoint does not support that content type"
+
+
+class ServerValidationErrorResponse(ErrorResponse):
+    status_code = 422
 
 
 class ServerErrorResponse(ErrorResponse):
