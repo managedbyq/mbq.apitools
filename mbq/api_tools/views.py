@@ -2,12 +2,11 @@ import json
 from functools import wraps
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
 from typing_extensions import Literal
 
-from . import exceptions, fields
+from . import exceptions, fields, settings
 from .responses import (
     ClientErrorResponse,
     ListResponse,
@@ -164,7 +163,7 @@ class ViewFunction:
         )
         return schema_class(
             unknown=self.on_unknown_field
-            or settings.API_TOOLS.get("UNKNOWN_PARAM_FIELDS", "raise")
+            or settings.project_settings.UNKNOWN_PARAM_FIELDS
         )
 
     def get_payload_schema(self):
@@ -175,7 +174,7 @@ class ViewFunction:
         )
         return schema_class(
             unknown=self.on_unknown_field
-            or settings.API_TOOLS.get("UNKNOWN_PAYLOAD_FIELDS", "raise")
+            or settings.project_settings.UNKNOWN_PAYLOAD_FIELDS
         )
 
     def __call__(self, *args, **kwargs):
