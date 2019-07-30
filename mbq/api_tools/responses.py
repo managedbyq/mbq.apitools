@@ -109,6 +109,12 @@ class NotFoundResponse(ErrorResponse):
     detail = "Resource not found"
 
 
+class UnauthenticatedResponse(ErrorResponse):
+    status_code = 401
+    error_code = "unauthenticated"
+    detail = "Authentication credientials were not provided"
+
+
 class UnauthorizedResponse(ErrorResponse):
     status_code = 403
     error_code = "unauthorized"

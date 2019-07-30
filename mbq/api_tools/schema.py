@@ -1,12 +1,10 @@
 from copy import copy
 
-from django.conf import settings
-
 from marshmallow import Schema as MarshmallowSchema
 from marshmallow import ValidationError as MarshmallowValidationError
 from marshmallow import post_load, pre_load
 
-from . import exceptions, fields, utils
+from . import exceptions, fields, settings, utils
 
 
 # Responses
@@ -14,7 +12,7 @@ class Pagination(utils.Immutable):
     """Immutable pagination query parameters."""
 
     DEFAULT_PAGE = 1
-    DEFAULT_PAGE_SIZE = settings.API_TOOLS.get("DEFAULT_PAGE_SIZE", 20)
+    DEFAULT_PAGE_SIZE = settings.project_settings.DEFAULT_PAGE_SIZE
 
 
 class Params(utils.Immutable):
