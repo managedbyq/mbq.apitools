@@ -182,7 +182,7 @@ responses.ClientErrorResponse("email_already_taken", "The email you have provide
 * `error_code`
     * `"too_many_requests"`
 ```python
-responses.TooManyRequestsResponse(detail="Too many request for template")
+responses.TooManyRequestsResponse(detail="Too many requests for template")
 ```
 
 #### `ServerErrorResponse`
