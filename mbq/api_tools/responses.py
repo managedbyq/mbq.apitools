@@ -133,6 +133,11 @@ class ServerValidationErrorResponse(ErrorResponse):
     status_code = 422
 
 
+class TooManyRequestsResponse(ErrorResponse):
+    status_code = 429
+    error_code = "too_many_requests"
+
+
 class ServerErrorResponse(ErrorResponse):
     status_code = 500
     error_code = "server_error"

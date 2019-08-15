@@ -177,6 +177,14 @@ responses.ClientErrorResponse("quote_state_error", "Cannot approve an already ap
 responses.ClientErrorResponse("email_already_taken", "The email you have provided is already in use")
 ```
 
+#### `TooManyRequestsResponse`
+* 429
+* `error_code`
+    * `"too_many_requests"`
+```python
+responses.TooManyRequestsResponse(detail="Too many requests for template")
+```
+
 #### `ServerErrorResponse`
 * 500
 * `error_code`
