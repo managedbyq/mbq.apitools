@@ -1,4 +1,5 @@
 import json
+import logging
 from functools import wraps
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -19,6 +20,7 @@ from .schema import Pagination, ParamSchema, PayloadSchema, generate_schema
 from .utils import first
 
 
+logger = logging.getLogger(__name__)
 PermissionsCollection = Union[List[Any], Tuple[Any, ...]]
 HttpMethodNames = Literal["GET", "POST", "PATCH", "PUT", "DELETE"]
 OnUnknownField = Literal["raise", "exclude"]
@@ -34,6 +36,7 @@ class ViewDecorator:
         paginated: bool = False,
         page_size: Optional[int] = None,
         on_unknown_field: Optional[OnUnknownField] = None,
+        verbose_logging: bool = False,
         _method: Optional[bool] = None,
     ):
         if not permissions:
@@ -54,6 +57,7 @@ class ViewDecorator:
 
         self.paginated = paginated
         self.page_size = page_size
+        self.verbose_logging = verbose_logging
 
         if self.page_size and not self.paginated:
             raise ValueError(
@@ -70,6 +74,7 @@ class ViewDecorator:
         func.paginated = self.paginated
         func.page_size = self.page_size
         func.on_unknown_field = self.on_unknown_field
+        func.verbose_logging = self.verbose_logging
 
         if self._method:
             return func
@@ -137,6 +142,7 @@ class ViewFunction:
         self.paginated = view_func.paginated
         self.page_size = view_func.page_size
         self.on_unknown_field = view_func.on_unknown_field
+        self.verbose_logging = view_func.verbose_logging
 
         # Add the pagination fields to the params
         if self.paginated:
@@ -182,6 +188,7 @@ class ViewFunction:
         # Backwards compat thing for DRF permissions
         self.args = args
         self.kwargs = kwargs
+        logging_level = logging.INFO if self.verbose_logging else logging.DEBUG
 
         try:
             self._enrich_request()
@@ -196,8 +203,10 @@ class ViewFunction:
             return response
 
         except exceptions.ValidationError as e:
+            logger.log(logging_level, f"ValidationError: {str(e)}")
             return ClientErrorResponse("validation_error", str(e))
         except exceptions.ImmediateResponseError as e:
+            logger.log(logging_level, f"ImmediateResponseError: {str(e)}")
             return e.response
 
     def _enrich_request(self):
