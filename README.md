@@ -66,7 +66,9 @@ Use the `@view` decorator for all function based views. It accepts the following
 * `page_size`
 	* Integer specifying the page size for a paginated response. This should only be used to override the default page size.
 * `on_unknown_field`
-	* `"raise"` or `"exclude"`. By default all endpoints will 400 if they receive an unknown query parameter or payload. This argument allows you to override the default behavior on a per view basis.
+    * `"raise"` or `"exclude"`. By default all endpoints will 400 if they receive an unknown query parameter or payload. This argument allows you to override the default behavior on a per view basis.
+* `verbose_logging`
+    * Bool, defaults to `False`. Raises the logging level of view `ValidationError` and `ImmediateResponseError` for better visibility during development.
 
 ### View
 
