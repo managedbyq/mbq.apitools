@@ -35,6 +35,15 @@ def view_func(request):
     return DetailResponse()
 
 
+class BlaBlaTest(SimpleTestCase):
+
+    def test_func(self):
+        def f(a1: int, a2: str) -> str:
+            return 'abc'
+
+        reveal_type(test_func)
+
+
 class ViewFunctionTests(SimpleTestCase):
     def setUp(self):
         super().setUp()

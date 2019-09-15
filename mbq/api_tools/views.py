@@ -1,9 +1,10 @@
 import json
 import logging
 from functools import wraps
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union, Callable
 
 from django.views.decorators.csrf import csrf_exempt
+from django.requests import HttpRequest
 
 from typing_extensions import Literal
 
@@ -25,6 +26,26 @@ PermissionsCollection = Union[List[Any], Tuple[Any, ...]]
 HttpMethodNames = Literal["GET", "POST", "PATCH", "PUT", "DELETE"]
 OnUnknownField = Literal["raise", "exclude"]
 
+
+from typing import cast, TypeVar
+
+from django.http import HttpRequest, JsonResponse
+from uuid import UUID
+Arg = Union[str, int, UUID]
+J1 = Callable[[HttpRequest], JsonResponse]
+J2 = Callable[[HttpRequest, str], JsonResponse]
+J3 = Callable[[HttpRequest, int], JsonResponse]
+J4 = Callable[[HttpRequest, UUID], JsonResponse]
+J5 = Callable[[HttpRequest, str, str], JsonResponse]
+J6 = Callable[[HttpRequest, int, int], JsonResponse]
+J7 = Callable[[HttpRequest, UUID, UUID], JsonResponse]
+J8 = Callable[[HttpRequest, str, int], JsonResponse]
+J9 = Callable[[HttpRequest, int, str], JsonResponse]
+J10 = Callable[[HttpRequest, str, UUID], JsonResponse]
+J11 = Callable[[HttpRequest, UUID, str], JsonResponse]
+J12 = Callable[[HttpRequest, int, UUID], JsonResponse]
+J13 = Callable[[HttpRequest, UUID, int], JsonResponse]
+ViewFuncType = TypeVar('ViewFuncType', bound=Union[J1, J2, J3, J4, J5, J6, J7, J8, J9, J10, J11, J12, J13])
 
 class ViewDecorator:
     def __init__(
@@ -66,7 +87,7 @@ class ViewDecorator:
 
         self._method = _method
 
-    def __call__(self, func):
+    def __call__(self, func: ViewFuncType) -> ViewFuncType:
         func.http_method_name = self.http_method_name
         func.permissions = self.permissions
         func.params = self.params
@@ -86,7 +107,7 @@ class ViewDecorator:
 
             return ViewFunction(func, request)(*args, **kwargs)
 
-        return csrf_exempt(wrapped_func)
+        return cast(ViewFuncType, csrf_exempt(wrapped_func))
 
     @classmethod
     def method(cls, *args, **kwargs):
