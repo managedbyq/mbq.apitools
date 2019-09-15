@@ -4,6 +4,7 @@
 
 *.egg-info
 *.py[co]
+.mypy_cache
 
 __pycache__
 
