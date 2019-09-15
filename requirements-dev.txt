@@ -4,9 +4,10 @@ flake8
 flake8-bugbear
 flake8-isort
 marshmallow==3.0.0rc8
-mypy-mypyc
+mypy
 pytest
 tox
 tox-travis
 tox-venv
-typing-extensions>=3.7.2
+django
+django-stubs

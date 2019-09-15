@@ -44,6 +44,7 @@ setuptools.setup(
         "marshmallow==3.0.0rc8",
         "typing-extensions>=3.7.2",
         "python-dateutil",
+        "django",
     ],
     zip_safe=False,
 )
